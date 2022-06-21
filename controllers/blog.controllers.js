@@ -68,7 +68,7 @@ const deleteBlogsById = async function(req, res){
     }
 }
 
- const updateBlogsByQuery = async function(req, res){
+ const deleteBlogsByQuery = async function(req, res){
      try{
          const queryData= req.query
          if(!queryData){
@@ -88,4 +88,4 @@ const deleteBlogsById = async function(req, res){
 
 module.exports.createBlog = createBlog
 module.exports.getBlogs = getBlogs
-module.exports.updateBlogsByQuery = updateBlogsByQuery
+module.exports.deleteBlogsByQuery = deleteBlogsByQuery
