@@ -20,7 +20,7 @@ const blogSchema = new mongoose.Schema({
         required: true
     },
     category:{
-     type:[String],
+     type: String,
      required:true
     },
     subcategory:{

@@ -21,9 +21,10 @@ app.use(cors());
 const Connectdatabase = require("./dbconnections/mogoconnections");
 
 
-///connect Database
+//connect Database
 
 Connectdatabase();
+//
 app.use('/',route);
 //create server
 
