@@ -1,11 +1,18 @@
 const express = require("express");
+const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
+const route = require('./routers/route')
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //config
 require("dotenv").config({
   path: "./.env",
 });
+
+
+
 
 
 app.use(express.json());
@@ -17,7 +24,7 @@ const Connectdatabase = require("./dbconnections/mogoconnections");
 ///connect Database
 
 Connectdatabase();
-
+app.use('/',route);
 //create server
 
 app.listen(process.env.PORT, () => {

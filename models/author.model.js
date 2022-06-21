@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 
 const authorSchema = new mongoose.Schema( {
-    firstName: String,
-    lastName: String,
+    fname: String,
+    lname: String,
     title: {
         type: String,
-        enum:[Mr, Mrs, Miss],
-
+        enum:["Mr", "Mrs", "Miss"],
         required: true
     },
     emailId:{
