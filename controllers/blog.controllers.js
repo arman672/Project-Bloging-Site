@@ -11,7 +11,7 @@ const createBlog = async function(req,res){
         if (!data.title) return res.status(400).send({ status: false, msg: "Title of blog is required" });
         if (!data.body) return res.status(400).send({ status: false, msg: "Description of blog is required" });
         if (!data.authorId) return res.status(400).send({ status: false, msg: "authorId is required" });
-        const author = await authorModel.findOne({ _id: data.authorId })
+        const author = await authorModel.findById(data.authorId)
         if (!author) {
             return res.status(400).send({ status: false, msg: "invalid authorId" })
         } else {
@@ -89,3 +89,46 @@ const deleteBlogsById = async function(req, res){
 module.exports.createBlog = createBlog
 module.exports.getBlogs = getBlogs
 module.exports.deleteBlogsByQuery = deleteBlogsByQuery
+const updateBlog = async (req,res) => {
+    try{
+    let getBlogId = req.params.blogId;
+
+    let findBlogId = await blogModel.findById(getBlogId);//finding the blogId in the database to check whether it is valid or not
+    if(!findBlogId) return res.status(404).send({ status: false, msg: "No such blog exist" });
+
+    //Verify that the document is deleted or not
+    if(findBlogId.isDeleted) return res.status(404).send({ status: false, msg: "No such blog found or has already been deleted" });
+
+    let data = req.body; //destructuring the data from the request body
+
+        //Updating the blog data in the database based on the blogId and the data provided in the request body
+        let updatedBlog = await blogModel.findByIdAndUpdate(
+            {_id: getBlogId},
+            {
+              $push:  {tags: data.tags, category: data.category, subcategory: data.subcategory} ,
+              title: data.title,
+              body: data.body,
+              isPublished: data.isPublished,
+            },
+            {new: true}
+          )
+      
+          if((!findBlogId.isPublished) && updatedBlog.isPublished){ 
+            let timeStamps = new Date(); //getting the current timeStamps
+            let updateData = await blogModel.findOneAndUpdate(
+              {_id: getBlogId}, //finding the blogId in the database to update the publishedAt
+              {publishedAt: timeStamps}, //updating the publishedAt
+              {new: true} //returning the updated data
+            )
+            return res.status(200).send({ status: true, data: updateData });
+          } 
+      
+          res.status(200).send({ status: true, data: updatedBlog });
+        }catch(error){
+            res.status(500).send({ staus: false, error: error.message });
+        }
+}
+
+module.exports.updateBlog = updateBlog;
+module.exports.createBlog = createBlog;
+module.exports.getBlogs = getBlogs;
