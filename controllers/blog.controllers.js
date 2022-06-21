@@ -93,17 +93,11 @@ const updateBlog = async (req, res) => {
 const deleteBlogsById = async function (req, res) {
     try {
         const blogId = req.params.blogId
-        if (!blogId) {
-            return res.status(400).send({ status: false, msg: "blogid missing" })
-        }
-
-        const blog = blogModel.findOne({ _id: blogId, isDeleted: false })
-        if (!blog) {
-            return res.status(404).send({ status: false, msg: "blog not found" })
-        } else {
-            blogModel.findOneAndUpdate({ _id: userId }, { isDeleted: true });
-            res.status(200).send()
-        }
+         
+       let blog =  await blogModel.findOneAndUpdate({ _id:blogId }, { isDeleted: true });
+       if(!blog) return res.status(404).send({msg: "Not found"});
+            res.status(200).send({msg: "document is deleted"});
+        
     } catch (err) {
         res.status(500).send({ staus: false, error: err.message })
     }
@@ -127,9 +121,15 @@ const deleteBlogsByQuery = async function (req, res) {
     }
 }
 
-//module.exports.deleteBlogsById = deleteBlogsById
+module.exports.deleteBlogsById = deleteBlogsById
 //module.exports.deleteBlogsByQuery = deleteBlogsByQuery
 module.exports.updateBlog = updateBlog;
 module.exports.createBlog = createBlog;
 module.exports.getBlogs = getBlogs;
 
+// {
+//     let data = req.body;
+//     if(Object.keys(data).length == 0) return 
+//     let createdata = await bookModel.create(data);
+//     res.send({data: createdata})
+// }
