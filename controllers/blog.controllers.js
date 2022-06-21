@@ -88,7 +88,7 @@ const updateBlog = async (req,res) => {
             res.status(500).send({ staus: false, error: error.message });
         }
 }
-//delete blogs (PUT)
+//delete blogs (DELETE)
 const deleteBlogsById = async function(req, res){
     try{
         const blogId= req.params.blogId
@@ -126,9 +126,9 @@ const deleteBlogsById = async function(req, res){
      }
 }
 
-
+//module.exports.deleteBlogsById = deleteBlogsById
 //module.exports.deleteBlogsByQuery = deleteBlogsByQuery
-//module.exports.updateBlog = updateBlog;
+module.exports.updateBlog = updateBlog;
 module.exports.createBlog = createBlog;
 module.exports.getBlogs = getBlogs;
 

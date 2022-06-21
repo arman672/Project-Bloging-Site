@@ -9,7 +9,7 @@ const blogModel= require('../models/blog.models');
 router.post('/authors', authorController.addAuthor);
 router.post('/blogs', blogController.createBlog);
 router.put('/blogs/:blogId',blogController.updateBlog);
-//router.get('/blogs', blogController.getBlogs);
+router.get('/blogs', blogController.getBlogs);
 
 
 
