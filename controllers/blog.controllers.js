@@ -1,5 +1,5 @@
-const authorModel = require("/models/author.model");
-const blogModel = require("/models/blog.models");
+const authorModel = require("../models/author.model");
+const blogModel = require("../models/blog.models");
 
 //create blogs (POST)
 const createBlog = async function (req, res) {

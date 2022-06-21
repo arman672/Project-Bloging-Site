@@ -12,7 +12,7 @@ const addAuthor = async (req,res) => {
     if(!data.fname) return res.status(400).send({ status: false, msg: "First Name is required" });
     if(!data.lname) return res.status(400).send({ status: false, msg: "Last Name is required" });
     if(!data.title) return res.status(400).send({ status: false, msg: "Title is required" });
-    if(!data.email) return res.status(400).send({ status: false, msg: "Email is required" });
+    if(!data.emailId) return res.status(400).send({ status: false, msg: "Email is required" });
     if(!data.password) return res.status(400).send({ status: false, msg: "Password is required" });
 
     let showAuthorData = await Author.create(data);
