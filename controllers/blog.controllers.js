@@ -35,13 +35,14 @@ const getBlogs = async function (req, res) {
         }
         //get by query
         
-        // //below code is to get all the blogs from the database that are not deleted and are published based on the certain criteria
-         let getBlogs = await blogModel.find(data).populate('authorId');
+        // //below code is to get all the blogs from the database based on filters
+         if(Object.keys(data).length != 0){
+        let getBlogs = await blogModel.find(data).populate('authorId');
 
         // //check that the getBlogs is empty or not
          if (getBlogs.length == 0) return res.status(404).send({ status: false, msg: "No such blog exist" });
          res.status(200).send({ status: true, data: getBlogs })
-
+         }
     }
     catch (err) {
         res.status(500).send({ staus: false, error: err.message })
