@@ -2,6 +2,9 @@ const authorModel = require("../models/author.model");
 const blogModel = require("../models/blog.models");
 
 //create blogs (post)
+let validString = /\d/; //validating the string for numbers using regEx
+
+//create blogs using post Api
 const createBlog = async function (req, res) {
     try {
         const data = req.body
@@ -11,13 +14,21 @@ const createBlog = async function (req, res) {
         if (!data.title) return res.status(400).send({ status: false, msg: "Title of blog is required" });
         if (!data.body) return res.status(400).send({ status: false, msg: "Description of blog is required" });
         if (!data.authorId) return res.status(400).send({ status: false, msg: "authorId is required" });
+
+        //validating the data for numbers in the body
+        if (validString.test(data.body) || validString.test(data.tags) || validString.test(data.category) || validString.test(data.subcategory))
+            return res.status(400).send({ status: false, msg: "Data must not contains numbers" });
+
         const author = await authorModel.findById(data.authorId)
-        if (!author) {
-            return res.status(400).send({ status: false, msg: "invalid authorId" })
-        } else {
-            const blog = await blogModel.create(data)
-            return res.status(201).send({ status: false, data: blog })
+        if (!author) return res.status(400).send({ status: false, msg: "invalid authorId" })
+
+        if (data.isPublished) {          //if blog isPublished it will add current date 
+            let timeStamps = new Date();
+            data.publishedAt = timeStamps;
         }
+        const blog = await blogModel.create(data)
+        return res.status(201).send({ status: false, data: blog })
+
     }
     catch (err) {
         res.status(500).send({ staus: false, error: err.message })
@@ -170,6 +181,9 @@ const updateBlog = async (req, res) => {
     }
 }
 
+
+module.exports.deleteBlogsById = deleteBlogsById
+module.exports.deleteBlogsByQuery = deleteBlogsByQuery
 module.exports.updateBlog = updateBlog;
 module.exports.createBlog = createBlog;
 module.exports.getBlogs = getBlogs;
