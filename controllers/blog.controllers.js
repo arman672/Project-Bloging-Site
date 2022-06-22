@@ -72,7 +72,7 @@ const updateBlog = async (req, res) => {
         //Verify that the document is deleted or not
         if (findBlogId.isDeleted) return res.status(404).send({ status: false, msg: "No such blog found or has already been deleted" });
 
-        let data = req.body; //destructuring the data from the request body
+        let data = req.body; //the data from the request body
 
         //Updating the blog data in the database based on the blogId and the data provided in the request body
         let updatedBlog = await blogModel.findByIdAndUpdate(
