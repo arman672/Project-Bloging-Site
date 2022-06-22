@@ -15,7 +15,7 @@ const addAuthor = async (req, res) => {
         if (!data.emailId) return res.status(400).send({ status: false, msg: "Email is required" });
         if (!data.password) return res.status(400).send({ status: false, msg: "Password is required" });
 
-        let validString = /\d/; //validating the string for numbers
+        let validString = /\d/; //validating the string for numbers using regEx
 
         //checking if the firstName and lastName are valid string
         if (validString.test(data.fname)) return res.status(400).send({ status: false, msg: "Enter a valid First Name" });
@@ -24,6 +24,7 @@ const addAuthor = async (req, res) => {
         let validTitle = ['Mr', 'Mrs', 'Miss']; //validating the title
         //checking if the title is valid
         if (!validTitle.includes(data.title)) return res.status(400).send({ status: false, msg: "Title should be one of Mr, Mrs, Miss" });
+        
         //checking if the email is valid by using email-validator package
         if (!validateEmail.validate(data.emailId)) return res.status(400).send({ status: false, msg: "Enter a valid email" })
 
