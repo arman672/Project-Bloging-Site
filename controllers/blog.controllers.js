@@ -106,7 +106,7 @@ const deleteBlogsById = async function (req, res) {
     try {
         const blogId = req.params.blogId
 
-        let blog = await blogModel.findOneAndUpdate({ _id: blogId }, { isDeleted: false });
+        let blog = await blogModel.findOneAndUpdate({ _id: blogId }, { isDeleted: true });
         if (!blog) return res.status(404).send({ msg: "Not found" });
         res.status(200).send({ msg: "document is deleted" });
 
