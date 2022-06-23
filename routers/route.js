@@ -17,11 +17,3 @@ router.delete('/deleteBlogsByQuery',blogController.deleteBlogsByQuery)
 
 
 module.exports = router;
-
-  // if(queryData[key].length>0){
-                //     for(let i = 0; i < queryData.length; i++){
-                //         blog[key][i] == queryData[key]
-                //         console.log("1: "+blog[key][i], queryData[key]) 
-                //         return blog[key]
-                //     }                   
-                // }

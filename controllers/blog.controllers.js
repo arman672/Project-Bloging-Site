@@ -1,9 +1,6 @@
 const authorModel = require("../models/author.model");
 const blogModel = require("../models/blog.models");
 
-//create blogs (post)
-let validString = /\d/; //validating the string for numbers using regEx
-
 //create blogs using post Api
 const createBlog = async function (req, res) {
     try {
@@ -11,13 +8,9 @@ const createBlog = async function (req, res) {
         //Validating data is empty or not
         if (Object.keys(data).length == 0) return res.status(400).send({ status: false, msg: "Data is required to create a Blog" });
         //Validation for data is present inside body or not
-        if (!data.title) return res.status(400).send({ status: false, msg: "Title of blog is required" });
-        if (!data.body) return res.status(400).send({ status: false, msg: "Description of blog is required" });
-        if (!data.authorId) return res.status(400).send({ status: false, msg: "authorId is required" });
-
-        //validating the data for numbers in the body
-        if (validString.test(data.body) || validString.test(data.tags) || validString.test(data.category) || validString.test(data.subcategory))
-            return res.status(400).send({ status: false, msg: "Data must not contains numbers" });
+        if (!data.title || data.title.trim().length===0) return res.status(400).send({ status: false, msg: "Title of blog is required" });
+        if (!data.body || data.body.trim().length===0) return res.status(400).send({ status: false, msg: "Description of blog is required" });
+        if (!data.authorId || data.authorId.trim().length===0) return res.status(400).send({ status: false, msg: "authorId is required" });
 
         const author = await authorModel.findById(data.authorId)
         if (!author) return res.status(400).send({ status: false, msg: "invalid authorId" })
@@ -66,16 +59,16 @@ const getBlogs = async function (req, res) {
             const blogs = await blogModel.find({ isPublished: true, isDeleted: false })
             return res.status(200).send({ status: true, data: blogs })
         }
-        const allBlogs = await blogModel.find({ isPublished: true, isDeleted: false })
+        const allBlogs = await blogModel.find({ isPublished: true, isDeleted: false }).populate('authorId');
         const blogs = allBlogs.filter(blog => {
             for (let key in queryData) {
                 if (blog[key] == queryData[key]) {
                     return true
                 } else {
-                    let data = queryData[key].split(',')
-                    for (let i = 0; i < data.length; i++) { 
+                    let arrayData = queryData[key].split(',')
+                    for (let i = 0; i < arrayData.length; i++) { 
                         for(let j = 0; j < blog[key].length; j++){                  
-                            if(blog[key][j] == data[i]) {
+                            if(blog[key][j] == arrayData[i]) {
                                 return true
                             }
                         }
@@ -135,13 +128,6 @@ const deleteBlogsByQuery = async function (req, res) {
     }
 }
 
-
-module.exports.createBlog = createBlog
-module.exports.getBlogs = getBlogs
-module.exports.deleteBlogsByQuery = deleteBlogsByQuery
-module.exports.deleteBlogsById = deleteBlogsById
-
-
 const updateBlog = async (req, res) => {
     try {
         let getBlogId = req.params.blogId;
@@ -187,3 +173,5 @@ module.exports.deleteBlogsByQuery = deleteBlogsByQuery
 module.exports.updateBlog = updateBlog;
 module.exports.createBlog = createBlog;
 module.exports.getBlogs = getBlogs;
+
+
