@@ -117,11 +117,23 @@ const deleteBlogsById = async function (req, res) {
 
 const deleteBlogsByQuery = async function (req, res) {
     try {
-        let query = req.query
+        let data = req.query
         //Validating query is empty or not
-        if (Object.keys(query).length == 0) {
+        if (Object.keys(data).length == 0) {
             return res.status(404).send({ status: false, msg: "enter query to delete blog" })
         }
+        let query = {};
+
+        if(data.subcategory){
+            data.subcategory = {$in: data.subcategory.split(',') }
+         }
+
+         query['$or'] = [
+            { isPublished: data.isPublished},
+            { authorId: data.authorId},
+            { category: data.category },
+            { subcategory: data.subcategory}
+         ]
         const deletedBlogs = await blogModel.find({ isDeleted: false }).updateMany(query, { isDeleted: true, deletedAt: new Date() }, { new: true })
         if (deletedBlogs.matchedCount == 0) {
             return res.status(404).send({ status: true, error: "blog not found" })
