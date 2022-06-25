@@ -10,15 +10,15 @@ const addAuthor = async (req, res) => {
         let data = req.body;
 
         if (Object.keys(data).length == 0) return res.status(400).send({ status: false, msg: "Data is required to add a Author" });
-        let validString = /(\d)?(\s)/; //validating the string for numbers and spaces using regEx
+        let validString =/^[a-z]$/i; //validating the string for numbers and spaces using regEx
 
         //Validation for data is present inside body or not
-        if (!data.fname) return res.status(400).send({ status: false, msg: "First Name is required" });
-        if (!data.lname) return res.status(400).send({ status: false, msg: "Last Name is required" });
-        if (!data.title || data.title.trim().length == 0) return res.status(400).send({ status: false, msg: "Title is required" });
+        if (!data.fname || data.fname.trim().length===0) return res.status(400).send({ status: false, msg: "First Name is required" });
+        if (!data.lname || data.lname.trim().length===0) return res.status(400).send({ status: false, msg: "Last Name is required" });
+        if (!data.title || data.title.trim().length===0) return res.status(400).send({ status: false, msg: "Title is required" });
         if (!data.emailId) return res.status(400).send({ status: false, msg: "Email is required" });
-        if (!data.password || data.password.trim().length == 0) return res.status(400).send({ status: false, msg: "Password is required" });
-        data.password = await bcrypt.hash(data.password, 10);
+        if (!data.password  && data.password.length===0) return res.status(400).send({ status: false, msg: "Password is required" });
+        data.password = await bcrypt.hash(data.password, 10);//encrypting password hash 2^10=1012 
 
         //checking if the firstName and lastName are valid string
         if (validString.test(data.fname)) return res.status(400).send({ status: false, msg: "Enter a valid First Name" });
@@ -61,9 +61,15 @@ const authorLogin = async (req, res) => {
 
         let checkPassword = await bcrypt.compare(data.password, getAuthorData.password)
         if (!checkPassword) return res.status(401).send({ status: false, msg: "Password is incorrect" });
-
+        console.log(getAuthorData._id.toString())
         //generating the token for logged in author
-        let token = jwt.sign({ authorId: getAuthorData._id }, process.env.JWT_SEC, { expiresIn: process.env.JWT_EXPIRES });
+        let token = jwt.sign(
+            { 
+            authorId: getAuthorData._id.toString()
+            }, 
+            process.env.JWT_SEC, 
+            { expiresIn: process.env.JWT_EXPIRES }
+        );
 
         //sending the token to the client in response in the header
         res.setHeader("x-api-key", token);

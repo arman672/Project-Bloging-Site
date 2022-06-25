@@ -3,21 +3,18 @@ const router= express.Router();
 
 const authorController= require('../controllers/author.controllers');
 const blogController = require('../controllers/blog.controllers');
-// const authorModel = require('../models/author.model');
-// const blogModel= require('../models/blog.models');
+const mw = require('../middlewares/auth');
 
 router.post('/authors', authorController.addAuthor);
 router.post('/login', authorController.authorLogin)
 
-
-
-
 router.post('/blogs', blogController.createBlog);
 router.get('/getBlogs', blogController.getBlogs);
-router.put('/blogs/:blogId',blogController.updateBlog);//deleteBlogsByQuery
-router.delete('/deleteBlogsById/:blogId',blogController.deleteBlogsById)
-router.delete('/deleteBlogsByQuery',blogController.deleteBlogsByQuery)
-//router.get('/blogs', blogController.getBlogs);
+router.put('/blogs/:blogId', mw.authenticate,blogController.updateBlog);//deleteBlogsByQuery
+
+router.delete('/deleteBlogsById/:blogId', mw.authenticate, blogController.deleteBlogsById)
+
+router.delete('/deleteBlogsByQuery',mw.authenticate,blogController.deleteBlogsByQuery)
 
 
 
