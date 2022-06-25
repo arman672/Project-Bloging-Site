@@ -15,8 +15,6 @@ require("dotenv").config({
 
 
 const Connectdatabase = require("./dbconnections/mogoconnections");
-
-
 //connect Database
 Connectdatabase();
 
