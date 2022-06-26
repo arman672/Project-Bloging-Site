@@ -128,7 +128,7 @@ exports.blogUpdate = async (req, res) => {
         }
         if (typeof data.isPublished === 'boolean') {
             if (data.isPublished == true) {
-                checkBlogId.publishedAt = new Date().toLocaleString();  //timestamp will add incase published is set to true
+                checkBlogId.publishedAt = new Date();  //timestamp will add incase published is set to true
                 checkBlogId.isPublished = true
             } if (data.isPublished == false) {
                 checkBlogId.publishedAt = ""
@@ -161,7 +161,7 @@ exports.delblog = async (req, res) => {
             await blogSchema.findOneAndUpdate(
                 { _id: id },
                 {
-                    $set: { isDeleted: true, DeletedAt: new Date().toLocaleString() }
+                    $set: { isDeleted: true, DeletedAt: new Date()}
                 })
             res.status(200).send({ status: true, msg: "Succesfull" });
         }
@@ -198,10 +198,10 @@ exports.delbyquery = async (req, res) => {
         ]
         let del = await blogSchema.find(query)
         if (del.length == 0) {
-            return res.status(404).send({ status: false, msg: "No such blog present or Not authorized to delete blog" })
+            return res.status(404).send({ status: true, msg: "No such blog present or Not authorized to delete blog" })
         }
         const result = await blogSchema.updateMany(
-            query, { $set: { isDeleted: true, DeletedAt: new Date().toLocaleString() } })
+            query, { $set: { isDeleted: false, DeletedAt: new Date().toLocaleString() } })
         res.status(200).send({ status: true, msg: "blogs deleted" })
     }
     catch (err) {
