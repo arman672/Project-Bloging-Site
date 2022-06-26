@@ -19,13 +19,16 @@ const blogSchema = new mongoose.Schema(
     tags: {
       type: [String],
       required: true,
+      lowercase: true
     },
     category: {
       type: [String],
       required: true,
+      lowercase: true
     },
     subcategory: {
       type: [String],
+      lowercase: true
     },
     isDeleted: {
       type: Boolean,
