@@ -47,7 +47,7 @@ exports.getBlog = async function (req, res) {
         let query = req.query;  //getting data from query params
 
         if (Object.keys(query).length == 0) {  //this block will work in case no filter is provided
-            const blog = await blogModel.find({ isPublished: true, isDeleted: false });
+            const blog = await blogSchema.find({ isPublished: true, isDeleted: false });
             if (blog.length == 0) return res.status(404).send({ status: false, msg: "No such blog exist" });
             return res.status(200).send({ status: true, data: blog })
         }
