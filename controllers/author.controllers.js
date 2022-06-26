@@ -46,7 +46,7 @@ exports.loginauthor = async function (req, res) {
                 msg: "User not found",
             });
         let token = jwt.sign({ authorId: author._id.toString() }, 'lama',{expiresIn:'6d'}); //generate jwt token at succesfull login 
-        res.status(200).send({ status: true, data: token });
+        res.status(200).send({ status: true, msg: "Login Successfull",token });
     }
     catch {
         res.status(500).send({ status: false, msg: err.message })

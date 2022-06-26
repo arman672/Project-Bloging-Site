@@ -31,7 +31,7 @@ exports.blogdata = async (req, res) => {
             data.publishedAt=publishedAt
           }
         let result = await blogSchema.create(data) //creating blog document after clearing all the validations
-        res.send({status:true , data:result})
+        res.status(201).send({status:true , data:result});
         
     }
     catch (err) {
