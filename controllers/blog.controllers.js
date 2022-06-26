@@ -157,7 +157,7 @@ exports.delblog = async (req, res) => {
                 return res.status(403).send({ status: false, data: "Not authorized" })
             }
             //Validation to check blog is already deleted or not
-            if (blogverify.isDeleted !== false) { return res.status(404).send({ status: false, msg: "Blog is already deleted" }) };
+            if (findblog.isDeleted !== false) { return res.status(404).send({ status: false, msg: "Blog is already deleted" }) };
             await blogSchema.findOneAndUpdate(
                 { _id: id },
                 {
