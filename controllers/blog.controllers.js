@@ -1,4 +1,5 @@
 const authorSchema = require('../models/author.model')
+const { find } = require('../models/blog.models')
 const blogSchema = require('../models/blog.models')
 
 //===================================================[API:FOR CREATING BLOG DB]===========================================================
@@ -161,7 +162,7 @@ exports.delblog = async (req, res) => {
             await blogSchema.findOneAndUpdate(
                 { _id: id },
                 {
-                    $set: { isDeleted: true, DeletedAt: new Date()}
+                    $set: { isDeleted: true, deletedAt: new Date()}
                 })
             res.status(200).send({ status: true, msg: "Succesfull" });
         }
@@ -201,7 +202,7 @@ exports.delbyquery = async (req, res) => {
             return res.status(404).send({ status: true, msg: "No such blog present or Not authorized to delete blog" })
         }
         const result = await blogSchema.updateMany(
-            query, { $set: { isDeleted: false, DeletedAt: new Date().toLocaleString() } })
+            query, { $set: { isDeleted: true, deletedAt: new Date().toLocaleString() } })
         res.status(200).send({ status: true, msg: "blogs deleted" })
     }
     catch (err) {
