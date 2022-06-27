@@ -1,5 +1,4 @@
 const authorSchema = require('../models/author.model')
-const { find } = require('../models/blog.models')
 const blogSchema = require('../models/blog.models')
 
 //===================================================[API:FOR CREATING BLOG DB]===========================================================
@@ -24,7 +23,7 @@ exports.blogdata = async (req, res) => {
 
         if (req.body.isDeleted === true) {  //if document is set to deleted true it will create timestamp
             let DeletedAt = new Date()
-            data.DeletedAt=DeletedAt
+            data.deletedAt=DeletedAt
           }
 
           if (req.body.isPublished === true) {  //if document is set to published true it will create timestamp
