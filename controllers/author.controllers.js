@@ -34,8 +34,8 @@ exports.authordata = async (req, res) => {
         .status(400)
         .send({ status: false, msg: "Title should be one of Mr, Mrs, Miss" });
 
-    if (!data.email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-         return res.status(404).send({ status: false, data: "Invalid email" })
+    if (!data.emailId.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+          return res.status(400).send({ status: false, msg: "Invalid email" })
     }
     //checking if email is unique or not
 
@@ -45,9 +45,9 @@ exports.authordata = async (req, res) => {
         .status(400)
         .send({ status: false, msg: "email aleready exist" });
     let result = await authorSchema.create(data);
-    return res.status(201).send({ result });
+    return res.status(201).send({ status: true, data: result  });
   } catch (err) {
-    res.status(500).send({ status: false, data: err.message });
+    res.status(500).send({ status: false, msg: err.message });
   }z
 };
 
@@ -70,7 +70,7 @@ exports.loginauthor = async function (req, res) {
     let token = jwt.sign({ authorId: author._id.toString() }, "lama", {
       expiresIn: "6d",
     });
-    res.status(200).send({ status: true, data: token });
+    res.status(200).send({ status: true, data:{token: token}});
   } catch {
     res.status(500).send({ status: false, msg: err.message });
   }
