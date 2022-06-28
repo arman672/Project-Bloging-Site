@@ -51,6 +51,7 @@ exports.authordata = async (req, res) => {
   }z
 };
 
+//===================================================[API:FOR AUTHOR LOGIN]===========================================================
 exports.loginauthor = async function (req, res) {
   try {
     let userName = req.body.email; //geting email from request body

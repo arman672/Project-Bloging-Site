@@ -91,6 +91,9 @@ exports.getBlog = async (req, res) => {
   }
 };
 
+//===================================================[API:FOR UPDATING BLOG DATA]===========================================================
+
+
 exports.blogUpdate = async (req, res) => {
   try {
     let data = req.body;
@@ -163,6 +166,8 @@ exports.blogUpdate = async (req, res) => {
   }
 };
 
+
+//===================================================[API:FOR DELETING BLOG DATA USING ID]===========================================================
 
 exports.delblog = async (req, res) => {
   try {
