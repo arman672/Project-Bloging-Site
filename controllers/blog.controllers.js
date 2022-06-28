@@ -1,23 +1,26 @@
 const authorSchema = require("../models/author.model");
 const blogSchema = require("../models/blog.models");
 
+//create blog
 exports.blogdata = async (req, res) => {
   try {
-    let data = req.bodyy; //getting author data from body
+    let data = req.body; //getting author data from body
 
     //validation for data present inside body or not
     if (Object.keys(data).length == 0)
       return res
         .status(404)
         .send({ status: false, msg: "plz enter blog data" });
-    if (!data.title)
+    if (!data.title || data.title.trim().length == 0)
       return res.status(404).send({ status: false, msg: "tittle missing" });
-    if (!data.body)
+    if (!data.body || data.body.trim().length == 0)
       return res.status(404).send({ status: false, msg: "body missing" });
     if (!data.authorId)
       return res.status(404).send({ status: false, msg: "authorId missing" });
     if (!data.category)
       return res.status(404).send({ status: false, msg: "category missing" });
+    if (!data.tags)
+    return res.status(404).send({ status: false, msg: "tags missing" });
 
     let id = data.authorId; //storing authorId in other variable
     let validauthor = await authorSchema.findById(id); //finding data from authorId got from request body
@@ -103,7 +106,7 @@ exports.blogUpdate = async (req, res) => {
     if (checkBlogId.isDeleted === true)
       return res.status(400).send({ msg: "Blog is already deleted" });
     if (id) {
-      //In this block verifying BlogId belongs to same author or no
+      //In this block verifying BlogId belongs to same author or not
       let blogverify = await blogSchema.findOne({
         _id: id,
         authorId: authorloged,
@@ -159,6 +162,7 @@ exports.blogUpdate = async (req, res) => {
     return res.status(500).send({ status: false, data: err.message });
   }
 };
+
 
 exports.delblog = async (req, res) => {
   try {

@@ -13,20 +13,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //connect Database
 Connectdatabase();
 
-
-
-
-
-
-
-
-
 //create server
 app.use('/',route);
 app.use('/',route1);
 
-
-app.listen(3000, () => {
-  console.log(`Server is running on http://localhost:${process.env.PORT}`);
+app.listen(process.env.PORT || 3000, function () {
+  console.log('Express app running on port ' + (process.env.PORT || 3000))
 });
 

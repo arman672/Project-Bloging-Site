@@ -34,9 +34,9 @@ exports.authordata = async (req, res) => {
         .status(400)
         .send({ status: false, msg: "Title should be one of Mr, Mrs, Miss" });
 
-    // if (!data.email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-    //     return res.status(404).send({ status: false, data: "Invalid email" })
-    // }
+    if (!data.email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+         return res.status(404).send({ status: false, data: "Invalid email" })
+    }
     //checking if email is unique or not
 
     let email = await authorSchema.findOne({ emailId: data.emailId });
@@ -48,7 +48,7 @@ exports.authordata = async (req, res) => {
     return res.status(201).send({ result });
   } catch (err) {
     res.status(500).send({ status: false, data: err.message });
-  }
+  }z
 };
 
 exports.loginauthor = async function (req, res) {
@@ -57,14 +57,14 @@ exports.loginauthor = async function (req, res) {
     let password = req.body.password; //getting password from request body
 
     let author = await authorSchema.findOne({
-      email: userName,
+      emailId: userName,
       password: password,
     });
     if (!author)
       //checking user data is available or not
       return res.status(400).send({
         status: false,
-        msg: "username  is not correct",
+        msg: "username  or password is not correct",
       });
     let token = jwt.sign({ authorId: author._id.toString() }, "lama", {
       expiresIn: "6d",
