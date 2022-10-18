@@ -24,11 +24,13 @@ exports.blogdata = async (req, res) => {
 
     let id = data.authorId; //storing authorId in other variable
     let validauthor = await authorSchema.findById(id); //finding data from authorId got from request body
-
     //validating authorId is present inside DB or not
-
     if (!validauthor)
       return res.status(404).send({ status: false, msg: "invalid author id" });
+
+    if(id != req.authorverfiy)
+      return res.status(403).send({ status: false, msg: "not authorized" });
+
     if (req.body.isDeleted === true) {
       //if document is set to deleted true it will create timestamp
       let deletedAt = new Date();
